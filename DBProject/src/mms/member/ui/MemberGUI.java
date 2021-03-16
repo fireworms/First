@@ -20,7 +20,7 @@ class MemGUI extends JFrame{
 		p1 = new JPanel();
 		add("North", p1);
 		
-		add = new JButton("등록");
+		add = new JButton("등록 ");
 		add.addActionListener(new Listeners());
 		list = new JButton("목록");
 		list.addActionListener(new Listeners());
