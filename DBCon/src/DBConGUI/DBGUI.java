@@ -25,7 +25,7 @@ public class DBGUI extends JFrame{
 		this.add(sPane);
 		
 		db = new UseDB();
-		rs = db.select();
+		rs = db.select("custmer");
 		try{
 			while(rs.next()){
 				String[] add = {rs.getString("name"), rs.getString("grade"), rs.getString("age"), rs.getString("job")};  
@@ -41,7 +41,6 @@ public class DBGUI extends JFrame{
 	public static void main(String[] args) {
 		DBGUI aa = new DBGUI();
 		aa.setVisible(true);
-		
 	}
 
 }

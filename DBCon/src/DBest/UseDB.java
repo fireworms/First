@@ -9,24 +9,41 @@ public class UseDB {
 	private PreparedStatement pstmt;
 	private ResultSet rs = null;
 	
-	public ResultSet select(){
-		String sql = "select * from custmer";
+	public ResultSet select(String tblName){
+		String sql = "select * from " + tblName;
 		return doSelect(sql);
 	}
 	
-	public void insert(String name, String grade, int age, String job){
-		String sql = "insert into custmer select ?, ?, ?, ? from dual";
-		doInsert(sql, name, grade, age, job);
+	public void remove(String tblName, String name){
+		String sql = "delete from " + tblName + " where name = ?";
+		doRemove(tblName, sql, name);
 	}
 	
-	private void doInsert(String sql, String name, String grade, int age, String job){
+	public void insert(String tblName, String name, int age, String job){
+		String sql = "insert into " + tblName + " select ?, ?, ?, ? from dual";
+		doInsert(sql, name, age, job);
+	}
+	
+	private void doRemove(String tblName, String sql, String name){
 		int isSuccess = 0;
 		try{
 			pstmt = dbconn.conn.prepareStatement(sql);
 			pstmt.setString(1, name);
-			pstmt.setString(2, grade);
-			pstmt.setInt(3, age);
-			pstmt.setString(4, job);
+			isSuccess = pstmt.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		if(isSuccess == 1){System.out.println("삭제 성공");}
+		else {System.out.println("삭제 실패");}
+	}
+	
+	private void doInsert(String sql, String name, int age, String job){
+		int isSuccess = 0;
+		try{
+			pstmt = dbconn.conn.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setInt(2, age);
+			pstmt.setString(3, job);
 			isSuccess = pstmt.executeUpdate();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -45,20 +62,4 @@ public class UseDB {
 		}
 		return rs;
 	}
-	public static void main(String[] args){
-		
-		UseDB db = new UseDB();
-
-		db.insert("파", "Gold", 18, "ㅍㅍ");
-		ResultSet rs = db.select();
-		try{
-			while(rs.next()){
-				System.out.println(rs.getString(1));
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-	}
-	
 }
